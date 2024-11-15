@@ -52,7 +52,7 @@ ui <- fluidPage(
 )
 
 library(readr)
-air_quality_data <- read_csv("open_aq_dataset.csv")
+air_quality_data <- read_csv("open_aq_location_225801_measurments.csv")
 
 server <- function(input, output, session) {
     output$time <- renderText({
