@@ -9,6 +9,27 @@ library(ggplot2)
 
 library(plotly)
 
+library(readr)
+
+library(data.table)
+library(httr)
+library(jsonlite)
+
+api_key <- Sys.getenv("OPEN_AQ_API_KEY")
+
+res <- GET(
+    "https://api.openaq.org/v3/locations?coordinates=51.508045,-0.128217&radius=25000&limit=1000",
+    add_headers(`X-API-Key` = api_key)
+)
+
+openaq_data <- fromJSON(rawToChar(res$content))
+results_data <- as.data.frame(openaq_data$results)
+output_dataframe <- as.data.frame(results_data)
+
+test <- output_dataframe$coordinates
+coordinates <- data.frame(output_dataframe$name, test$latitude, test$longitude)
+colnames(coordinates) <- c("name", "latitude", "longitude")
+
 
 my_sf <- read_sf("https://raw.githubusercontent.com/radoi90/housequest-data/refs/heads/master/london_boroughs.geojson")
 borough_data <- read.csv("london-borough-profiles-2016 Data set.csv")
@@ -68,8 +89,10 @@ server <- function(input, output, session) {
 
     output$plot2 <- renderPlotly({
         p <- ggplot() +
-            geom_sf(colour = "#241e55", data = my_sf, size = 1, linewidth = 0.15, aes(fill = GLA.Population.Estimate.2016)) +
+            geom_sf(colour = "#241e55", data = my_sf, size = 1, linewidth = 0.15, aes(color="red")) +
+            # geom_sf(colour = "#241e55", data = my_sf, size = 1, linewidth = 0.15, aes(fill = GLA.Population.Estimate.2016)) +
             scale_fill_viridis_c(option = "cyan") +
+            geom_point(data = coordinates, mapping=aes(x=longitude, y=latitude)) +
             coord_sf()
 
         ggplotly(p)
