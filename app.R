@@ -1,93 +1,65 @@
 library(shiny)
 library(leaflet)
-library(glue)
-
-library(sp)
-
 library(sf)
-library(ggplot2)
-
-library(plotly)
-
 library(readr)
+library(gstat)
+library(sp)
+library(raster)
+library(dplyr)
 
-library(data.table)
-library(httr)
-library(jsonlite)
-
-library("stringr")
-
-api_key <- Sys.getenv("OPEN_AQ_API_KEY")
-
-# GET ALL SENSORS IN LONDON
-# res <- GET(
-#     "https://api.openaq.org/v3/locations?coordinates=51.508045,-0.128217&radius=25000&limit=1000",
-#     add_headers(`X-API-Key` = api_key)
-# )
-
-# FORMAT DATA
-# openaq_data <- fromJSON(rawToChar(res$content))
-# results_data <- as.data.frame(openaq_data$results)
-# output_dataframe <- as.data.frame(results_data)
-
-# SAVE FULL DATAFRAME
-# write.csv(output_dataframe, "full_sensor_data.csv")
-
-# EXTRACT LONGITUDE, LATITUDE & RECORD OF LATEST READING
-# cords <- output_dataframe$coordinates
-# latest <- output_dataframe$datetimeLast
-# coordinates <- data.frame(output_dataframe$id, output_dataframe$name, cords$latitude, cords$longitude, latest$local)
-# colnames(coordinates) <- c("id", "name", "latitude", "longitude", "latest")
-
-# SAVE DATAFRAME
-# write.csv(coordinates, "sensor_data.csv")
-
-# GET CURRENT DATE
-# date <- Sys.Date()
-# str_date <- toString(date)
-
-# FILTER SENSORS RECENTLY TAKING RECORDINGS
-# sensor_data <- read.csv("sensor_data.csv")
-# current_sensor_data <- filter(sensor_data, str_sub(latest, 0, 10) == str_date)
-# write.csv(current_sensor_data, "current_sensor_data.csv")
-
-# # GET ALL SENSOR IDS
-# sensors <- read.csv("current_sensor_data.csv")
-# ids <- sensors$id
-
-# li <- list()
-
-# # ITERATE THROUGH IDS & GET FIRST SENSOR READING
-# for (element in ids) {
-#     res <- GET(
-#         glue("https://api.openaq.org/v3/locations/{element}/latest"),
-#         add_headers(`X-API-Key` = api_key)
-#     )
-#     openaq_data <- fromJSON(rawToChar(res$content))
-#     results_data <- as.data.frame(openaq_data$results)
-#     li <- append(li, results_data$value[1])
-# }
-
-# # ADD NEW COLUMN FOR SENSOR VALUES
-# sensors$value <- c(li)
-# sensors %>% filter(name == "Twickenham") #MANUALLY REMOVE OUTLIER
-
-# # https://stackoverflow.com/questions/24829027/unimplemented-type-list-when-trying-to-write-table
-# sensors <- apply(sensors, 2, as.character)
-# write.csv(sensors, "current_sensor_data_with_values.csv")
-
-
-my_sf <- read_sf("https://raw.githubusercontent.com/radoi90/housequest-data/refs/heads/master/london_boroughs.geojson")
-borough_data <- read.csv("london-borough-profiles-2016 Data set.csv")
+# Load greenspace shapefile
 greenspace <- st_read("GiGL_SpacesToVisit_Open_Shp/GiGL_SpacesToVisit_region.shp")  # Load greenspace shapefile
-greenspace <- st_transform(greenspace, crs = 4326)  # Reproject to WGS84 (same CRS as Leaflet)
+greenspace <- st_transform(greenspace, crs = 4326)  # Reproject to WGS84
 
+# Load borough data
+my_sf <- read_sf("https://raw.githubusercontent.com/radoi90/housequest-data/refs/heads/master/london_boroughs.geojson")
 
-colnames(borough_data)[colnames(borough_data) == "Area.name"] <- "name"
-df <- merge(x = my_sf, y = borough_data, by = "name")
-df$GLA.Population.Estimate.2016 <- as.numeric(gsub(",", "", df$GLA.Population.Estimate.2016))
-my_sf <- df
+# Load the correct air quality dataset
+air_quality_data <- read_csv("current_sensor_data_with_values.csv")
 
+# Filter out irrelevant or noisy data (e.g., "Twickenham" as an outlier)
+air_quality_data <- filter(air_quality_data, name != "Twickenham")
+
+# Convert air quality data to a spatial object
+air_quality_sf <- st_as_sf(
+    air_quality_data,
+    coords = c("longitude", "latitude"),
+    crs = 4326  # WGS84
+)
+
+# Reproject air quality data to British National Grid
+air_quality_sf <- st_transform(air_quality_sf, crs = 27700)
+
+# Convert air quality data to SpatialPointsDataFrame for interpolation
+air_quality_sp <- sp::SpatialPointsDataFrame(
+    coords = st_coordinates(air_quality_sf),
+    data = as.data.frame(air_quality_sf),
+    proj4string = sp::CRS(as.character(st_crs(air_quality_sf)$proj4string))
+)
+
+# Create interpolation grid
+london_bbox <- bbox(air_quality_sp)
+grid <- raster(
+    extent(london_bbox),
+    resolution = 500,  # Set grid cell size
+    crs = sp::CRS("+init=epsg:27700")  # British National Grid
+)
+
+# Perform IDW interpolation
+idw_model <- gstat(
+    formula = value ~ 1,
+    locations = air_quality_sp,
+    set = list(idp = 2)  # Power parameter
+)
+
+# Interpolate the grid
+air_quality_raster <- interpolate(grid, idw_model)
+
+# Normalize raster values
+air_quality_raster <- (air_quality_raster - cellStats(air_quality_raster, "min")) /
+                      (cellStats(air_quality_raster, "max") - cellStats(air_quality_raster, "min"))
+
+# Define UI
 ui <- fluidPage(
     titlePanel("Urban Wellbeing Dashboard"),
     sidebarLayout(
@@ -99,61 +71,63 @@ ui <- fluidPage(
             p(textOutput("pollution")),
             p(textOutput("time")),
             radioButtons(
-                "test", "Factor Prioritisation:",
+                "test", "Data Layers:",
                 c(
-                    "Population" = "pop",
                     "Air Quality" = "air_qual",
-                    "Greenspace" = "greenspace"
+                    "Greenspace" = "greenspace",
+                    "Wellbeing Metric" = "Wellbeing Metric"
                 )
             ),
+            sliderInput(
+                "wellbeing_slider",
+                "Wellbeing Metric Prioritization:",
+                min = 0, max = 100, value = 50,
+                post = "% Air Quality vs Greenspace"
+            )
         ),
         mainPanel(
             h4("London"),
-            plotlyOutput("plot2"),
+            leafletOutput("map"),
             sliderInput(
                 inputId = "time_slider",
                 label = "Time at sensor:",
                 value = 0,
                 min = 0,
-                max = 22,
+                max = 24,
                 width = "100%"
-            )
+            ),
+            
         )
-    ),
+    )
 )
 
-
-new <- read_csv("current_sensor_data_with_values.csv")
-new <- filter(new, name != "Twickenham")
-
-library(readr)
-air_quality_data <- read_csv("open_aq_dataset.csv")
-
+# Define server
 server <- function(input, output, session) {
-    output$time <- renderText({
-        time <- input$time_slider
-        glue("Time: {time}:00")
-    })
-    observeEvent(input$time_slider, {
-        output$pollution <- renderText({
-            value <- air_quality_data$value[input$time_slider]
-            glue("No2 Reading: {value} µg/m³")
-        })
+    observeEvent(input$wellbeing_slider, {
+        air_weight <- input$wellbeing_slider / 100
+        green_weight <- 1 - air_weight
+        greenspace$wellbeing_metric <- green_weight  # Add metric for greenspace (dummy example)
     })
 
-    output$plot2 <- renderPlotly({
-        p <- ggplot() +
-            geom_sf(colour = "#241e55", data = my_sf, size = 1, linewidth = 0.15, aes(color="red")) + 
-            geom_sf(data = greenspace, fill = "green", alpha = 0.4, colour = "darkgreen", linetype = "dotted") +
-            # geom_sf(colour = "#241e55", data = my_sf, size = 1, linewidth = 0.15, aes(fill = GLA.Population.Estimate.2016)) +
-            scale_fill_viridis_c(option = "cyan") +
-            # geom_point(data = coordinates, mapping=aes(x=longitude, y=latitude, color="all sensors")) +
-            geom_point(data = new, mapping=aes(x=longitude,y=latitude, color=value)) +
-            # geom_point(data = current_sensor_data, mapping=aes(x=longitude,y=latitude, color="active sensors")) +
-            coord_sf()
-
-        ggplotly(p)
+    output$map <- renderLeaflet({
+        leaflet() %>%
+            addTiles() %>%
+            addRasterImage(
+                air_quality_raster,
+                colors = colorNumeric("RdYlGn", values(air_quality_raster), na.color = NA),
+                opacity = 0.7
+            ) %>%
+            addPolygons(
+                data = greenspace,
+                fillColor = "forestgreen",
+                color = "darkgreen",
+                weight = 1,
+                opacity = 0.5,
+                fillOpacity = 0.4,
+                popup = ~paste("Greenspace Area")
+            )
     })
 }
 
+# Run the app
 shinyApp(ui, server)
