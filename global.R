@@ -1,32 +1,18 @@
 library(shiny)
 library(leaflet)
 library(glue)
-
 library(sp)
-
 library(gstat)
 library(sf)
 library(ggplot2)
-
 library(plotly)
-
 library(readr)
-
 library(data.table)
 library(httr)
 library(jsonlite)
-
 library(raster)
 library(dplyr)
 
-library(shiny)
-library(leaflet)
-library(sf)
-library(readr)
-library(gstat)
-library(sp)
-library(raster)
-library(dplyr)
 
 library("stringr")
 
