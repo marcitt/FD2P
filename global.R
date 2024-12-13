@@ -125,7 +125,7 @@ greenspace_raster <- rasterize(
 #make it so that the greenspace part in wellbeing metric measures greenspace proximity
 greenspace_raster <- distance(greenspace_raster)
 
-decay_constant <- 2000  # constant for importance of proximity 
+decay_constant <- 2000  # constant chosen for importance of proximity in the wellbeing metric
 greenspace_raster <- exp(-greenspace_raster / decay_constant)
 
 greenspace_raster <- (greenspace_raster - cellStats(greenspace_raster, "min")) /

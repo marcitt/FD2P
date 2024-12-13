@@ -9,7 +9,7 @@ ui <- fluidPage(
                 min = 0, max = 100, value = 50,
                 post = "% Air Quality vs Greenspace"
             ),
-            sliderInput(
+            sliderInput( #threshold slider
                 "threshold_slider",
                 "Wellbeing Threshold:",
                 min = 0, max = 1, value = 0,
