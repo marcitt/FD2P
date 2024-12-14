@@ -23,7 +23,7 @@ server <- function(input, output, session) {
         filtered_wellbeing_raster <- wellbeing_raster
         filtered_wellbeing_raster[filtered_wellbeing_raster < threshold] <- NA  # Mask values below threshold
         
-        # Update the reactiveVal
+        # Update the reactiveVal function
         reactive_wellbeing(filtered_wellbeing_raster)
     })
 
