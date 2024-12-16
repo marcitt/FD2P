@@ -14,75 +14,23 @@ library(raster)
 library(dplyr)
 library(stringr)
 
-api_key <- Sys.getenv("OPEN_AQ_API_KEY")
+source("processing/air_quality_processing.R")
 
-# Get live air quality data
-get_london_air_quality <- function() {
-    res <- GET(
-        "https://api.openaq.org/v3/locations?coordinates=51.508045,-0.128217&radius=25000&limit=1000", #endpoint to find sensors within a 25000 radius of London
-        add_headers(`X-API-Key` = api_key) #API key required in header to use openaq 
-    )
-    openaq_data <- fromJSON(rawToChar(res$content)) #access content of Response 
-    results <- as.data.frame(openaq_data$results) #extract results from content of Response
+str_date <- Sys.Date()
 
-    cords <- results$coordinates #extract coordinates from content
-    latest <- results$datetimeLast #find latest sensor recording from results 
-    df <- data.frame(results$id, results$name, cords$latitude, cords$longitude, latest$local) #store as a new dataframe with latitude, longitude and latest sensor reading
-    colnames(df) <- c("id", "name", "latitude", "longitude", "latest")
+file_path <- glue("data/air_quality/{str_date}/active_pm25_london_sensors_{str_date}.csv")
 
-    write.csv(df, "data/air_quality/london_sensor_data_full.csv") #write csv for further preprocessing steps
-}
-
-filter_latest_air_quality <- function(file_path, str_date) {
-    sensor_data <- read.csv(file_path)
-    current_sensor_data <- filter(sensor_data, str_sub(latest, 0, 10) == str_date) #filter for sensors that have taken a measurement for today
-    write.csv(current_sensor_data, glue("data/air_quality/london_sensor_data_{str_date}.csv")) # write csv for further preprocessing steps
-}
-
-get_sensor_values <- function(file_path, str_date) {
-    sensors <- read.csv(file_path)
-    ids <- sensors$id
-
-    li <- list()
-    for (element in ids) {
-        # for every element in the list of sensor ids get the latest reading for that sensor
-        res <- GET(
-            glue("https://api.openaq.org/v3/locations/{element}/latest"),
-            add_headers(`X-API-Key` = api_key)
-        )
-        openaq_data <- fromJSON(rawToChar(res$content))
-        results_data <- as.data.frame(openaq_data$results)
-        #values give access to the sensor data - in this case we extract the first value - this needs to be validated
-        li <- append(li, results_data$value[1])
-    }
-    sensors$value <- c(li)
-    sensors <- apply(sensors, 2, as.character)
-    write.csv(sensors, glue("data/air_quality/london_sensor_data_values_{str_date}.csv"))
-}
-
-# Current date
-date <- Sys.Date()
-str_date <- toString(date)
-
-file_path <- glue("data/air_quality/london_sensor_data_values_{str_date}.csv")
+# Check if air quality data exists
 if (file.exists(file_path)) {
-    air_quality <- read_csv(glue("data/air_quality/london_sensor_data_values_{str_date}.csv"))
+    air_quality <- read_csv(file_path)
 } else {
-    get_london_air_quality()
-    filter_latest_air_quality("data/air_quality/london_sensor_data_full.csv", str_date)
-    get_sensor_values(glue("data/air_quality/london_sensor_data_{str_date}.csv"), str_date)
-    air_quality <- read_csv(glue("data/air_quality/london_sensor_data_values_{str_date}.csv"))
+    get_active_london_sensors()
+    get_individual_sensors()
+    aggregate_sensors()
+    air_quality <- read_csv(file_path)
 }
 
-# Greenspace shapefile
-greenspace <- st_read("data/GiGL_SpacesToVisit_Open_Shp/GiGL_SpacesToVisit_region.shp")
-greenspace <- st_transform(greenspace, crs = 4326)
-greenspace_for_raster <- st_transform(greenspace, crs = 27700)
-
-air_quality <- read_csv("data/air_quality/london_sensor_data_values_2024-12-08.csv")
-air_quality <- filter(air_quality, name != "Twickenham")
-
-# Spatial object
+# Convert to sf spatial object
 air_quality_sf <- st_as_sf(
     air_quality,
     coords = c("longitude", "latitude"),
@@ -90,31 +38,33 @@ air_quality_sf <- st_as_sf(
 )
 air_quality_sf <- st_transform(air_quality_sf, crs = 27700)
 
-air_quality_sp <- sp::SpatialPointsDataFrame(
-    coords = st_coordinates(air_quality_sf),
-    data = as.data.frame(air_quality_sf),
-    proj4string = sp::CRS(as.character(st_crs(air_quality_sf)$proj4string))
-)
+london_boundary <- read_sf("https://raw.githubusercontent.com/radoi90/housequest-data/refs/heads/master/london_boroughs.geojson")
+london_boundary <- st_transform(london_boundary, crs = 27700)
 
-# Interpolation grid
-london_bbox <- bbox(air_quality_sp)
+london_bbox <- st_bbox(london_boundary) # Get the bounding box (extent) of London's polygon
 grid <- raster(
-    extent(london_bbox),
-    resolution = 125,
-    crs = sp::CRS("EPSG:27700")
+    extent(london_bbox), # Use the bounding box extent
+    resolution = 125, # Define grid resolution
+    crs = st_crs(london_boundary)$proj4string # Use CRS of the London boundary shapefile
 )
 
-# IDW interpolation
+# IDW interpolation directly with sf object
 idw_model <- gstat(
     formula = value ~ 1,
-    locations = air_quality_sp,
-    set = list(idp = 2)
+    locations = air_quality_sf, # Using sf object directly
+    set = list(idp = 2) # Inverse Distance Weighting (IDW)
 )
 air_quality_raster <- interpolate(grid, idw_model)
+air_quality_raster <- mask(air_quality_raster, london_boundary)
 
-# Normalize raster values 
+# Normalize raster values
 air_quality_raster <- (air_quality_raster - cellStats(air_quality_raster, "min")) /
     (cellStats(air_quality_raster, "max") - cellStats(air_quality_raster, "min"))
+
+# Greenspace shapefile
+greenspace <- st_read("data/GiGL_SpacesToVisit_Open_Shp/GiGL_SpacesToVisit_region.shp")
+greenspace <- st_transform(greenspace, crs = 4326)
+greenspace_for_raster <- st_transform(greenspace, crs = 27700)
 
 # Greenspace rasterization
 greenspace_raster <- rasterize(
@@ -124,17 +74,17 @@ greenspace_raster <- rasterize(
     background = NA
 )
 
-#make it so that the greenspace part in wellbeing metric measures greenspace proximity
+# make it so that the greenspace part in wellbeing metric measures greenspace proximity
 greenspace_raster <- distance(greenspace_raster)
 
-decay_constant <- 2000  # constant chosen for importance of proximity in the wellbeing metric
+decay_constant <- 2000 # constant chosen for importance of proximity in the wellbeing metric
 greenspace_raster <- exp(-greenspace_raster / decay_constant)
 
 greenspace_raster <- (greenspace_raster - cellStats(greenspace_raster, "min")) /
-                    (cellStats(greenspace_raster, "max") - cellStats(greenspace_raster, "min"))
+    (cellStats(greenspace_raster, "max") - cellStats(greenspace_raster, "min"))
 greenspace_raster <- 1 - greenspace_raster
 
-#default wellbeing raster
+# default wellbeing raster
 air_weight <- 0.5
 green_weight <- 0.5
 wellbeing_raster <- air_weight * air_quality_raster +

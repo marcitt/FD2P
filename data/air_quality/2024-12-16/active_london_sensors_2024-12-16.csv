@@ -1,0 +1,99 @@
+"","id","name","locality","timezone","distance"
+"1",146,"Southwark - A2 Old Kent Road FIDAS","Southwark","Europe/London",5664.83719756
+"2",149,"Ealing - Horn Lane TEOM","Ealing","Europe/London",9618.90873956
+"3",154,"Westminster - Marylebone Road","Westminster","Europe/London",2443.94598885
+"4",157,"Bexley - Slade Green","Bexley","Europe/London",22243.17485376
+"5",225705,"Bexley - Belvedere West","Bexley","Europe/London",18494.21311144
+"6",225707,"Enfield - Derby Road","Enfield","Europe/London",13045.96782114
+"7",225708,"Barking and Dagenham - Rush Green","Barking and Dagenham","Europe/London",22125.67759842
+"8",225709,"Croydon - Norbury","Croydon","Europe/London",10758.92412965
+"9",225710,"Greenwich - Blackheath","Greenwich","Europe/London",8961.36560134
+"10",225711,"Enfield - Bowes Primary School","Enfield","Europe/London",11780.10566092
+"11",225713,"Brent - ARK Franklin Primary Academy","Brent","Europe/London",6780.88155109
+"12",225714,"Bexley - Belvedere","Bexley","Europe/London",20031.32284631
+"13",225715,"Brent - Neasden Lane","Brent","Europe/London",9731.08065733
+"14",225719,"Brent - John Keble Primary School","Brent","Europe/London",8938.06537365
+"15",225723,"Brent - Ikea","Brent","Europe/London",10282.54385806
+"16",225725,"Bromley - Harwood Avenue","Bromley","Europe/London",15311.52214017
+"17",225727,"Barking and Dagenham - Scrattons Farm","Barking and Dagenham","Europe/London",18276.0960952
+"18",225730,"Enfield - Prince of Wales School","Enfield","Europe/London",19329.11001186
+"19",225733,"Ealing - Hanger Lane Gyratory","Ealing","Europe/London",11683.33627666
+"20",225736,"Enfield - Bush Hill Park","Enfield","Europe/London",15841.23024245
+"21",225741,"Ealing - Acton Vale ","Ealing","Europe/London",8792.98469704
+"22",225744,"Ealing - Western Avenue","Ealing","Europe/London",9687.96385677
+"23",225747,"Greenwich - A206 Burrage Grove","Greenwich","Europe/London",14175.15973381
+"24",225751,"Greenwich - Plumstead High Street","Greenwich","Europe/London",15683.41024744
+"25",225755,"Greenwich - John Harrison Way","Greenwich","Europe/London",9779.54463557
+"26",225761,"Greenwich - Woolwich Flyover","Greenwich","Europe/London",10414.3402924
+"27",225763,"Havering - Rainham","Havering","Europe/London",23205.90505832
+"28",225766,"Lewisham - Deptford","Lewisham","Europe/London",7819.35974115
+"29",225767,"Lambeth - Brixton Road","Lambeth","Europe/London",4973.49735686
+"30",225769,"Greenwich - Fiveways Sidcup Rd A20","Greenwich","Europe/London",15663.29835626
+"31",225776,"Lewisham - Loampit Vale","Lewisham","Europe/London",9158.76769849
+"32",225782,"Islington - Arsenal","Islington","Europe/London",5743.04710007
+"33",225786,"Lambeth - Streatham Green","Lambeth","Europe/London",8880.52415482
+"34",225787,"Southwark - Tower Bridge Road","Southwark","Europe/London",3548.45791232
+"35",225789,"Havering - Romford","Havering","Europe/London",22511.03064082
+"36",225791,"Islington - Holloway Road","Islington","Europe/London",5337.1556879
+"37",225793,"Southwark - Elephant and Castle","Southwark","Europe/London",2481.55154468
+"38",225794,"Southwark - Lower Road","Southwark","Europe/London",5371.13605822
+"39",225796,"Greenwich - Falconwood FDMS","Bexley","Europe/London",15927.49432047
+"40",225800,"Greenwich - Trafalgar Road (Hoskins St)","Greenwich","Europe/London",9324.92250614
+"41",225801,"Westminster - Elizabeth Bridge","Westminster","Europe/London",2190.0740794
+"42",225802,"Southwark - Vicarage Grove","Southwark","Europe/London",4748.17687028
+"43",225803,"Lewisham - Honor Oak Park","Lewisham","Europe/London",9049.32033034
+"44",225805,"Wandsworth - Lavender Hill (Clapham Jct)","Wandsworth","Europe/London",5608.88447621
+"45",225806,"Richmond Upon Thames - Castelnau","Richmond","Europe/London",8186.62552108
+"46",225807,"Westminster - Covent Garden","Westminster","Europe/London",635.61581605
+"47",225839,"Wandsworth - Battersea","Wandsworth","Europe/London",3314.72134919
+"48",225848,"Westminster - Oxford Street","Westminster","Europe/London",1830.31160457
+"49",225850,"Wandsworth - Tooting High Street","Wandsworth","Europe/London",9148.66517594
+"50",225852,"Wandsworth - Putney High Street","Wandsworth","Europe/London",7853.42119413
+"51",230827,"Southwark - South Circular Road","Southwark","Europe/London",8076.08360215
+"52",270693,"Waterloo Place (The Crown Estate)","Westminster","Europe/London",341.19033338
+"53",270712,"Lewisham - Laurence House Catford","Lewisham","Europe/London",10184.52455594
+"54",1235983,"Islington",NA,"Europe/London",5014.25943261
+"55",1462792,"UAL Creative Computing Institute, Greencoat Building",NA,"Europe/London",4935.20935533
+"56",2453304,"Marylebone Road",NA,"Europe/London",2527.54739964
+"57",2453309,"Honor Oak Park",NA,"Europe/London",8831.09371416
+"58",2453312,"Honor Oak Park",NA,"Europe/London",8831.09371416
+"59",2453319,"Marylebone Road",NA,"Europe/London",2527.54739964
+"60",2984093,"Maiden Lane, London",NA,"Europe/London",3816.21694676
+"61",3039088,"Farthing downs",NA,"Europe/London",22236.46538593
+"62",3053804,"Twickenham",NA,"Europe/London",15961.2160338
+"63",3057945,"Harlesden LP2",NA,"Europe/London",8149.99767846
+"64",3057946,"Harlesden HP2",NA,"Europe/London",8327.17600093
+"65",3057947,"Harlesden HP1",NA,"Europe/London",8525.21874989
+"66",3057948,"Harlesden LP1",NA,"Europe/London",8409.17806124
+"67",3079185,"Stondon Walk",NA,"Europe/London",12349.27392239
+"68",3261167,"Primrose Hill",NA,"Europe/London",3871.44921239
+"69",3278199,"Perivale, Buckingham Ave",NA,"Europe/London",13877.73111464
+"70",3308933,"Mitcham Road",NA,"Europe/London",9522.57995697
+"71",3308934,"Bellevue Road / Trinity Road",NA,"Europe/London",7645.80538193
+"72",3308935,"Twickenham Primary Academy",NA,"Europe/London",16317.08828847
+"73",3308936,"Wandsworth Bridge",NA,"Europe/London",6381.04568733
+"74",3308937,"Battersea Park Road",NA,"Europe/London",3799.46320402
+"75",3308938,"Thomson House School",NA,"Europe/London",10570.25998868
+"76",3308939,"Putney High Street",NA,"Europe/London",8070.37358197
+"77",3308940,"Nine Elms Lane",NA,"Europe/London",3059.76933041
+"78",3308941,"Richmond Bus Garage",NA,"Europe/London",13367.93111006
+"79",3308942,"High St, Barnes",NA,"Europe/London",9231.09970447
+"80",3308943,"Church Rd",NA,"Europe/London",19285.90297958
+"81",3308944,"St Mary's RC Primary",NA,"Europe/London",3669.20375164
+"82",3308945,"High St, Witton",NA,"Europe/London",17169.40054843
+"83",3308946,"Park Rd, Hampton Hill",NA,"Europe/London",18016.89899329
+"84",3308947,"Lwr Rich Rd, Chertsy Corner, nr j/w houses",NA,"Europe/London",11138.61111733
+"85",3308948,"Holy Trinity CE Primary School",NA,"Europe/London",12024.8196103
+"86",3308949,"King St, Twickenham",NA,"Europe/London",15511.70881264
+"87",3308950,"Kew Rd, before j/w South Circle / Kew Green",NA,"Europe/London",11386.33835209
+"88",3308951,"Nelson Primary School",NA,"Europe/London",17346.99619572
+"89",3308952,"St Margaret's Road, Twickenham",NA,"Europe/London",14504.06800243
+"90",3308953,"Chase Bridge Primary School",NA,"Europe/London",16241.28831673
+"91",3308954,"Roehampton Lane",NA,"Europe/London",10094.93802648
+"92",3308955,"Deer Park School",NA,"Europe/London",13938.16170081
+"93",3308956,"Kew Rd, Richmond, opposite station",NA,"Europe/London",13001.89535637
+"94",3308957,"The Vineyard Schl, Friars Stile Rd",NA,"Europe/London",13199.88483092
+"95",3308958,"Wandsworth Town",NA,"Europe/London",7296.71403532
+"96",3308959,"Archdeacon Cambridge's CofE Primary School",NA,"Europe/London",16561.41374464
+"97",3309035,"St Richards CE Primary School",NA,"Europe/London",15484.28615981
+"98",3309037,"West Hill",NA,"Europe/London",7669.77898059
