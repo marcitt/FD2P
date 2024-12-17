@@ -45,33 +45,6 @@ body {
     color: #F2FCE6 !important; /* Light green */
 }
 
-/* Slider Wrapper for Positioning */
-.slider-wrapper {
-    position: relative;
-    margin-bottom: 30px; /* Space between sliders */
-    width: calc(100% - 60px); /* Shorten to accommodate icons */
-    margin-left: auto;
-    margin-right: auto;
-}
-
-/* Left and Right Icons */
-.icon-left, .icon-right {
-    position: absolute;
-    width: 30px; /* Icon size */
-    height: 30px;
-    top: 50%; /* Center vertically */
-    transform: translateY(-50%); /* Adjust centering */
-    pointer-events: none; /* Non-interactive */
-}
-
-.icon-left {
-    left: -40px; /* Position to the left */
-}
-
-.icon-right {
-    right: -40px; /* Position to the right */
-}
-
 /* Slider Labels */
 .shiny-input-container label {
     font-family: 'Libre Franklin', sans-serif !important;
@@ -119,6 +92,54 @@ body {
     padding: 2px 5px;
 }
 
+/* Slider Wrapper for Positioning */
+.slider-wrapper {
+    position: relative;
+    margin-bottom: 30px; /* Space between sliders */
+    width: calc(100% - 60px); /* Shorten to accommodate icons */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Left and Right Icons */
+.icon-left, .icon-right {
+    position: absolute;
+    width: 30px; /* Icon size */
+    height: 30px;
+    top: 50%; /* Center vertically */
+    transform: translateY(-50%); /* Adjust centering */
+    pointer-events: none; /* Non-interactive */
+}
+
+.icon-left {
+    left: -40px; /* Position to the left */
+}
+
+.icon-right {
+    right: -40px; /* Position to the right */
+}
+
+/* Wrapper for Text Underneath Sliders */
+.slider-text {
+    display: flex;
+    justify-content: space-between; /* Align text to the sides */
+    font-size: 12px; /* Adjust text size */
+    color: #F2FCE6; /* Text color */
+    font-family: 'Libre Franklin', sans-serif;
+    font-weight: 400; /* Regular weight */
+}
+
+/* Left and Right Text Specificity */
+.slider-text .left-text {
+    text-align: left; /* Align left text */
+    margin-left: -10px; /* Adjust position if needed */
+}
+
+.slider-text .right-text {
+    text-align: right; /* Align right text */
+    margin-right: -10px; /* Adjust position if needed */
+}
+
 /* Decorative Leaves */
 .bottom-leaves {
     position: fixed;
@@ -136,3 +157,4 @@ body {
 .leaflet-container {
     border-radius: 24px !important; /* Rounded map edges */
 }
+
