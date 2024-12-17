@@ -12,7 +12,7 @@ server <- function(input, output, session) {
 
         # Apply threshold filter
         threshold <- input$threshold_slider
-        wellbeing[wellbeing < threshold/10] <- NA
+        wellbeing[wellbeing < threshold / 10] <- NA
 
         wellbeing
     })
@@ -29,7 +29,7 @@ server <- function(input, output, session) {
             ) %>%
             addRasterImage(
                 reactive_wellbeing(),
-                colors = colorNumeric("RdYlBu", values(air_quality_raster), na.color = "transparent"),
+                colors = colorNumeric("RdYlGn", values(air_quality_raster), na.color = "transparent"),
                 opacity = 0.7,
                 group = "Wellbeing Metric"
             ) %>%
@@ -41,6 +41,22 @@ server <- function(input, output, session) {
                 opacity = 0.5,
                 fillOpacity = 0.4,
                 group = "Public Greenspace"
+            ) %>%
+            addLegend(
+                position = "bottomright",
+                pal = colorNumeric("YlOrRd", values(air_quality_raster_unnormalised), na.color = NA),
+                values = values(air_quality_raster_unnormalised),
+                title = "Air Quality (PM2.5 µg/m3))",
+                group = "Air Quality",
+                opacity = 1
+            ) %>%
+            addLegend(
+                position = "bottomright",
+                pal = colorNumeric("RdYlGn", values(reactive_wellbeing()*10), na.color = "transparent"),
+                values = values(reactive_wellbeing()*10),
+                title = "Wellbeing Metric",
+                group = "Wellbeing Metric",
+                opacity = 1
             ) %>%
             addLayersControl(
                 overlayGroups = c("Air Quality", "Public Greenspace", "Wellbeing Metric"),

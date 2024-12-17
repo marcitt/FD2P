@@ -50,6 +50,7 @@ grid <- raster(extent(london_bbox), resolution = 125, crs = st_crs(london_bounda
 # 3. IDW interpolation for air quality
 idw_model <- gstat(formula = value ~ 1, locations = air_quality_sf, set = list(idp = 2))
 air_quality_raster <- mask(interpolate(grid, idw_model), london_boundary)
+air_quality_raster_unnormalised <- mask(interpolate(grid, idw_model), london_boundary)
 air_quality_raster <- normalize_raster(air_quality_raster)
 
 # 4. Greenspace proximity calculation
