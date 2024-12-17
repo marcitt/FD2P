@@ -12,6 +12,17 @@ OPEN_AQ_API_KEY = [YOUR API KEY]
 ```
 
 To create API Key please sign-up at OpenAQ: https://docs.openaq.org/using-the-api/api-key
+This is required to display recently collected air quality data - if you would like to skip this step please comment out this line in `global.R`:
+```
+air_quality <- load_air_quality(str_date)
+```
+
+and uncomment this line to use a previously stored data-frame:
+```
+air_quality <- read_csv("data/air_quality/2024-12-16/active_pm25_london_sensors_2024-12-17.csv")
+```
+
+**Additional Notes:** There are several limitations in the 'live' data collection abilities of the app, which may include issues associated with people using the platform in different time zone (other than the UK), or if it is very close to 12AM (e.g. 1AM-3AM) since there might not have been enough time to collect enough data between these hours - if any problems occur related to this please follow the steps above to use static air quality data instead.
 
 ## Running App
 Once all set-up steps have been completed the Shiny app should be possible to run using:

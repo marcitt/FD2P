@@ -1,14 +1,14 @@
 "","id","name","locality","timezone","distance"
-"1",60,"Haringey Roadside - UKA00260","Haringey","Europe/London",10976.86641226
-"2",146,"Southwark A2 Old Kent Road - UKA00558","Southwark","Europe/London",5665.03600858
+"1",60,"Haringey - Haringey Town Hall","Haringey","Europe/London",10977.07232387
+"2",146,"Southwark - A2 Old Kent Road FIDAS","Southwark","Europe/London",5664.83719756
 "3",148,"London Bloomsbury - UKA00211","London","Europe/London",1597.95162687
 "4",149,"Ealing - Horn Lane","Ealing","Europe/London",9616.94136246
 "5",150,"London Haringey Priory Park South - UKA00568","London","Europe/London",8472.36836139
-"6",151,"Tower Hamlets Roadside - UKA00257","Tower Hamlets","Europe/London",6187.90849342
+"6",151,"Tower Hamlets - Mile End Road","Tower Hamlets","Europe/London",6187.88693828
 "7",152,"Camden Kerbside - UKA00259","London","Europe/London",5186.61654336
 "8",153,"London Hillingdon - UKA00266","London","Europe/London",23135.49875362
 "9",154,"Westminster - Marylebone Road","Westminster","Europe/London",2443.94598885
-"10",155,"London N. Kensington - UKA00253","Kensington and Chelsea","Europe/London",6096.25954024
+"10",155,"Kensington and Chelsea - North Ken","Kensington and Chelsea","Europe/London",6096.18301725
 "11",157,"Bexley - Slade Green","Bexley","Europe/London",22243.17485376
 "12",158,"London Teddington Bushy Park - UKA00572","London","Europe/London",17689.87955524
 "13",159,"London Westminster - UKA00435","London","Europe/London",1505.52597322
@@ -52,7 +52,7 @@
 "51",225800,"Greenwich - Trafalgar Road (Hoskins St)","Greenwich","Europe/London",9324.92250614
 "52",225801,"Westminster - Elizabeth Bridge","Westminster","Europe/London",2190.0740794
 "53",225802,"Southwark - Vicarage Grove","Southwark","Europe/London",4748.17687028
-"54",225803,"London Honor Oak Park - UKA00656","Lewisham","Europe/London",9049.10437157
+"54",225803,"Lewisham - Honor Oak Park","Lewisham","Europe/London",9049.32033034
 "55",225805,"Wandsworth - Lavender Hill (Clapham Jct)","Wandsworth","Europe/London",5608.88447621
 "56",225806,"Richmond Upon Thames - Castelnau","Richmond","Europe/London",8186.62552108
 "57",225807,"Westminster - Covent Garden","Westminster","Europe/London",635.61581605

@@ -36,8 +36,8 @@ normalize_raster <- function(r) {
 str_date <- Sys.Date()
 
 # 1. Load air quality data
-#air_quality <- load_air_quality(str_date)
-air_quality <- read_csv("data/air_quality/2024-12-16/active_pm25_london_sensors_2024-12-16.csv")
+air_quality <- load_air_quality(str_date)
+# air_quality <- read_csv("data/air_quality/2024-12-16/active_pm25_london_sensors_2024-12-17.csv")
 air_quality_sf <- st_as_sf(air_quality, coords = c("longitude", "latitude"), crs = 4326) %>%
     st_transform(crs = 27700)
 
