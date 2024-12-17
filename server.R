@@ -12,7 +12,7 @@ server <- function(input, output, session) {
 
         # Apply threshold filter
         threshold <- input$threshold_slider
-        wellbeing[wellbeing < threshold / 10] <- NA
+        wellbeing[wellbeing < threshold / 10] <- NA #/10 since the threshold slider is from 0-10
 
         wellbeing
     })

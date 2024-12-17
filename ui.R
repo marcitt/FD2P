@@ -15,7 +15,7 @@ ui <- fluidPage(
         sidebarPanel(
             class = "sidebar",  #custom sidebar class
             h2("Personalised Wellbeing Metric"),
-            h3("Your personalised wellbeing metric includes a prioritization slider to help you choose how much the metric is affected by Greenspace proximity and PM2.5 density. The treshold slider helps you navigate the best places for your ideal Wellbeing weighting!"),
+            h3("Your personalised wellbeing metric includes a prioritization slider to help you choose how much the metric is affected by Greenspace proximity and PM2.5 density. The threshold slider helps you navigate the best places for your ideal Wellbeing weighting!"),
             
             # Prioritisation Slider with icons and text underneath
             tags$div(class = "slider-wrapper",

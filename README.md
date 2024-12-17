@@ -22,7 +22,7 @@ and uncomment this line to use a previously stored data-frame instead:
 air_quality <- read_csv("data/air_quality/2024-12-16/active_pm25_london_sensors_2024-12-17.csv")
 ```
 
-**Additional Notes:** There are several limitations in the 'live' data collection abilities of the app, which may include issues associated with people using the platform in different time zone (other than the UK), or if it is very close to 12AM (e.g. 1AM-3AM) since there might not have been enough time to collect enough data between these hours - if any problems occur related to this please follow the steps above to use static air quality data instead.
+**Additional Notes:** There are several limitations in the 'live' data collection abilities of the app, which may include issues associated with people using the platform in different time zones (other than the UK), or if it is very close to 12AM (e.g. 1AM-3AM) since there might not have been enough time to collect enough data between these hours - if any problems occur related to this please follow the steps above to use static air quality data instead.
 
 ## Running App
 Once all set-up steps have been completed the Shiny app should be possible to run using:
