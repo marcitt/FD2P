@@ -36,7 +36,8 @@ normalize_raster <- function(r) {
 str_date <- Sys.Date()
 
 # 1. Load air quality data
-air_quality <- load_air_quality(str_date)
+#air_quality <- load_air_quality(str_date)
+air_quality <- read_csv("data/air_quality/2024-12-16/active_pm25_london_sensors_2024-12-16.csv")
 air_quality_sf <- st_as_sf(air_quality, coords = c("longitude", "latitude"), crs = 4326) %>%
     st_transform(crs = 27700)
 
@@ -60,5 +61,9 @@ greenspace_raster <- distance(greenspace_raster)
 greenspace_raster <- exp(-greenspace_raster / 2000) # Decay constant for proximity importance
 greenspace_raster <- normalize_raster(1 - greenspace_raster)
 
-# 5. Default wellbeing metric raster
+# Default wellbeing metric raster
 wellbeing_raster <- normalize_raster(1 - (0.5 * air_quality_raster + 0.5 * greenspace_raster))
+
+#for greenspace visualization layer
+greenspace <- st_read("data/GiGL_SpacesToVisit_Open_Shp/GiGL_SpacesToVisit_region.shp")
+greenspace <- st_transform(greenspace, crs = 4326)

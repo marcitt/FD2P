@@ -12,7 +12,7 @@ server <- function(input, output, session) {
 
         # Apply threshold filter
         threshold <- input$threshold_slider
-        wellbeing[wellbeing < threshold] <- NA
+        wellbeing[wellbeing < threshold/10] <- NA
 
         wellbeing
     })
@@ -33,10 +33,20 @@ server <- function(input, output, session) {
                 opacity = 0.7,
                 group = "Wellbeing Metric"
             ) %>%
+            addPolygons(
+                data = greenspace,
+                fillColor = "forestgreen",
+                color = "darkgreen",
+                weight = 1,
+                opacity = 0.5,
+                fillOpacity = 0.4,
+                group = "Public Greenspace"
+            ) %>%
             addLayersControl(
-                overlayGroups = c("Air Quality", "Wellbeing Metric"),
+                overlayGroups = c("Air Quality", "Public Greenspace", "Wellbeing Metric"),
                 options = layersControlOptions(collapsed = FALSE)
             ) %>%
-            hideGroup("Air Quality")
+            hideGroup("Air Quality") %>%
+            hideGroup("Public Greenspace")
     })
 }

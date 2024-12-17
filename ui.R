@@ -1,18 +1,45 @@
-# ui.R: User interface for Shiny app
-
 ui <- fluidPage(
-    titlePanel("Urban Wellbeing Dashboard"),
-    sidebarLayout(
-        sidebarPanel(
-            h4("Customize Wellbeing Metric"),
-            sliderInput("wellbeing_slider", "Wellbeing Metric Prioritization:",
-                        min = 0, max = 100, value = 50, post = "% Air Quality vs Greenspace"),
-            sliderInput("threshold_slider", "Wellbeing Threshold:",
-                        min = 0, max = 1, value = 0, step = 0.01)
+    # Import Google Font and Custom CSS
+    tags$head(
+        tags$link(
+            rel = "stylesheet", 
+            href = "https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@300;400;700&display=swap"
         ),
+        includeCSS("www/styles.css")  # Centralized custom CSS
+    ),
+    
+    # Title Panel with Customized Style
+    tags$div("London Outdoor Wellbeing Map", class = "title-panel"),
+    
+    # Layout: Sidebar and Main Panel
+    sidebarLayout(
+        # Sidebar Panel with Custom Class
+        sidebarPanel(
+            class = "sidebar",  # Assign custom sidebar class
+            h2("Personalised Wellbeing Metric"),
+            h3("Your personalised wellbeing metric includes a prioritization slider to help you choose how much the metric is affected by Greenspace proximity and PM2.5 density. The treshold slider helps you navigate the best places for your ideal Wellbeing weighting!"),
+            
+            # Prioritisation Slider with Icons
+            tags$div(class = "slider-wrapper",
+                tags$img(src = "tree_icon.svg", class = "icon-left"),  # Left icon
+                sliderInput("wellbeing_slider", "Wellbeing Metric Prioritisation" , min = 0, max = 100, value = 50, post = "% Air Quality"),  # Slider
+                tags$img(src = "wind_icon.svg", class = "icon-right")  # Right icon
+            ),
+            
+            # Threshold Slider with Icons
+            tags$div(class = "slider-wrapper",
+                tags$img(src = "brain_fog_icon.svg", class = "icon-left"),  # Left icon
+                sliderInput("threshold_slider", "Wellbeing Metric Treshold" , min = 0, max = 10, value = 0, step = 0.1),  # Slider
+                tags$img(src = "wellbeing_icon.svg", class = "icon-right")  # Right icon
+            )
+        ),
+        
+        # Main Panel for Map
         mainPanel(
-            h4("London Wellbeing Map"),
             leafletOutput("map", height = "600px")
         )
-    )
+    ),
+    
+    # Bottom Decorative Leaves
+    tags$div(class = "bottom-leaves")
 )

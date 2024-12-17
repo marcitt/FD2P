@@ -1,0 +1,138 @@
+/* General Styling */
+body {
+    font-family: 'Libre Franklin', sans-serif;
+    background-color: #F2FCE6; /* Light green background */
+    margin: 0;
+    padding: 0;
+    color: #1D5E36; /* Default text color */
+}
+
+/* Title Panel Styling */
+.title-panel {
+    text-align: left;
+    font-size: 36px;
+    font-weight: 800; /* Bold */
+    color: #1D5E36; /* Dark green */
+    margin: 20px 0;
+}
+
+/* Sidebar Styling */
+.sidebar {
+    background-color: #1D5E36 !important; /* Dark green */
+    border-radius: 24px !important;
+    padding: 20px !important;
+    color: #F2FCE6 !important; /* Light text */
+}
+
+.well {
+    background-color: #1D5E36 !important; /* Dark green */
+    border: none !important;
+    box-shadow: none !important;
+    color: #F2FCE6 !important;
+}
+
+.sidebar h2 {
+    font-size: 24px !important;
+    font-weight: 700 !important; /* Bold */
+    margin-bottom: 20px !important;
+    color: #F2FCE6 !important; /* Light green */
+}
+
+.sidebar h3 {
+    font-size: 11px !important;
+    font-weight: 500 !important; /* Bold */
+    margin-bottom: 20px !important;
+    color: #F2FCE6 !important; /* Light green */
+}
+
+/* Slider Wrapper for Positioning */
+.slider-wrapper {
+    position: relative;
+    margin-bottom: 30px; /* Space between sliders */
+    width: calc(100% - 60px); /* Shorten to accommodate icons */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Left and Right Icons */
+.icon-left, .icon-right {
+    position: absolute;
+    width: 30px; /* Icon size */
+    height: 30px;
+    top: 50%; /* Center vertically */
+    transform: translateY(-50%); /* Adjust centering */
+    pointer-events: none; /* Non-interactive */
+}
+
+.icon-left {
+    left: -40px; /* Position to the left */
+}
+
+.icon-right {
+    right: -40px; /* Position to the right */
+}
+
+/* Slider Labels */
+.shiny-input-container label {
+    font-family: 'Libre Franklin', sans-serif !important;
+    font-size: 18px !important;
+    font-weight: 600 !important; /* Semi-bold */
+    color: #F2FCE6 !important; /* Light text */
+    margin-bottom: 10px !important;
+}
+
+/* Slider Styles */
+.irs-line {
+    height: 10px !important;
+    border-radius: 10px !important;
+    background: #E4FBC5 !important; /* Light green for unfilled part */
+}
+
+.irs-bar {
+    background: #BCE3F3 !important; /* Blue for filled part */
+    border-radius: 10px !important;
+}
+
+.irs-handle {
+    background-color: #D8A77E !important; /* Tan handle */
+    border: 3px solid #8C6239 !important; /* Brown border */
+    width: 20px !important;
+    height: 20px !important;
+    border-radius: 50% !important;
+}
+
+/* Slider Handle Hover */
+.irs-handle:hover {
+    transform: scale(1.1) !important;
+    transition: all 0.2s ease-in-out !important;
+}
+
+/* Slider Value (Current Handle Value) */
+.irs-single {
+    font-family: 'Libre Franklin', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1D5E36; /* Dark green */
+    background: #E4FBC5;
+    border: none;
+    border-radius: 5px;
+    padding: 2px 5px;
+}
+
+/* Decorative Leaves */
+.bottom-leaves {
+    position: fixed;
+    bottom: -50px; /* Clip out of page */
+    left: 0;
+    width: 100%;
+    height: 200px; /* Height of leaves */
+    background-image: url('leaf_left.svg'), url('leaf_right.svg');
+    background-repeat: no-repeat, no-repeat;
+    background-position: -50px bottom, calc(100% + 50px) bottom;
+    background-size: 350px, 350px; /* Larger clipping effect */
+    pointer-events: none; /* Non-interactive */
+}
+
+.leaflet-container {
+    border-radius: 24px !important; /* Rounded map edges */
+}
