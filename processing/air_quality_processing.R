@@ -34,23 +34,24 @@ get_active_london_sensors <- function() {
 
     str_date <- Sys.Date()
 
-    # create file structure for subsequent data
-    dir_path <- glue("data/air_quality/{str_date}")
+    dir_path <- glue("data/air_quality/{str_date}") 
     if (!dir.exists(dir_path)) {
-        dir.create(dir_path, recursive = TRUE)
+        dir.create(dir_path, recursive = TRUE) # create folder for this date
     }
 
     dir_path <- glue("data/air_quality/{str_date}/location_data")
     if (!dir.exists(dir_path)) {
-        dir.create(dir_path, recursive = TRUE)
+        dir.create(dir_path, recursive = TRUE) # create location data folder
     }
 
     # filter for recently active sensors (have recorded at least one reading for today )
     active_london_sensors <- filter(london_sensors, str_sub(datetimeLast$utc, 0, 10) == str_date)
+    # remove any unnecessary columns we do not need
     reduced_active_london_sensors <- select(active_london_sensors, -country, -bounds, -owner, -provider, -isMobile, -isMonitor, -instruments, -sensors, -coordinates, -licenses, -datetimeFirst, -datetimeLast)
     write.csv(reduced_active_london_sensors, glue("data/air_quality/{str_date}/active_london_sensors_{str_date}.csv"))
 }
 
+# record a dataframe for a location id 
 record_location_df <- function(location_id) {
     res <- GET(
         glue("https://api.openaq.org/v3/locations/{location_id}/sensors"),
@@ -58,24 +59,24 @@ record_location_df <- function(location_id) {
     )
     parsed <- fromJSON(rawToChar(res$content))
 
-    # Check if 'results' exist
+    # check if results exists
     if (is.null(parsed$results) || length(parsed$results) == 0) {
         message("No data found for location: ", location_id)
-        return(NULL) # Skip this location
+        return(NULL) # skip
     }
 
-    df <- parsed$results
+    df <- parsed$results #create data frame from parsed results
 
-    # Ensure 'latest' exists
+    # check if latest exists
     if (is.null(df$latest)) {
         message("No 'latest' data for location: ", location_id)
-        return(NULL) # Skip this location
+        return(NULL) # skip
     }
 
-    latest_date <- df$datetimeLast
-    utc <- latest_date$utc
+    latest_date <- df$datetimeLast #get datetimeLast column
+    utc <- latest_date$utc #get utc from latest_date
 
-    # Ensure 'coordinates' exist
+    # check for coordinates
     if (is.null(df$latest$coordinates)) {
         message("No coordinates for location: ", location_id)
         return(NULL) # Skip this location
@@ -83,18 +84,19 @@ record_location_df <- function(location_id) {
 
     coordinates <- df$latest$coordinates
 
+    #unlist is required to assign to a dataframe
     df$latestDateUTC <- unlist(utc)
     df$value <- unlist(df$latest$value)
     df$latitude <- unlist(coordinates$latitude)
     df$longitude <- unlist(coordinates$longitude)
 
-    # Select relevant columns (avoid errors if they don't exist)
+    #remove any unnecessary columns
     df <- df %>%
         select(-datetimeFirst, -datetimeLast, -parameter, -coverage, -summary, -latest)
 
     str_date <- Sys.Date()
 
-    # Check if directory exists, create if not
+    # check if location_data directory already exists
     dir_path <- glue("data/air_quality/{str_date}/location_data")
     if (!dir.exists(dir_path)) {
         dir.create(dir_path, recursive = TRUE)
@@ -108,8 +110,10 @@ get_individual_sensors <- function() {
     str_date <- Sys.Date()
     active_london_sensors <- read.csv(glue("data/air_quality/{str_date}/active_london_sensors_{str_date}.csv"))
 
+    # get location ids for active london sensors
     location_ids <- active_london_sensors$id
 
+    # loop through active london sensors and record a dataframe for each individual sensor
     for (location in location_ids) {
         record_location_df(location)
     }
@@ -117,13 +121,15 @@ get_individual_sensors <- function() {
 
 aggregate_sensors <- function() {
     str_date <- Sys.Date()
+    # list all the files within the location_data directory
     file_list <- list.files(path = glue("data/air_quality/{str_date}/location_data"), pattern = "*.csv", full.names = TRUE)
 
-    # Read and combine all files
+    # merge files into one
     df <- do.call(rbind, lapply(file_list, read.csv))
 
     particulate <- "pm25 µg/m³"
 
+    # filter for latest date and particulate (pm25)
     df <- filter(df, str_sub(latestDateUTC, 0, 10) == str_date)
     df <- filter(df, name == particulate)
 

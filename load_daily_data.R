@@ -1,6 +1,3 @@
-# global.R: Data preprocessing and raster preparation
-
-# Load required libraries
 library(shiny)
 library(leaflet)
 library(glue)
@@ -15,7 +12,6 @@ library(jsonlite)
 
 source("processing/air_quality_processing.R")
 
-# Helper: Fetch or load processed air quality data
 load_air_quality <- function(date) {
     file_path <- glue("data/air_quality/{date}/active_pm25_london_sensors_{date}.csv")
     if (!file.exists(file_path)) {
@@ -26,8 +22,8 @@ load_air_quality <- function(date) {
     read_csv(file_path)
 }
 
-# Current date for processing
+# current date
 str_date <- Sys.Date()
 
-# 1. Load air quality data
+# load air quality data
 air_quality <- load_air_quality(str_date)

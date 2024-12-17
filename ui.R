@@ -42,7 +42,6 @@ ui <- fluidPage(
             )
         ),
         
-        # Main Panel for Map
         mainPanel(
             leafletOutput("map", height = "600px")
         )
