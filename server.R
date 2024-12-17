@@ -17,7 +17,7 @@ server <- function(input, output, session) {
         wellbeing
     })
 
-    # Render Leaflet map
+    # Render map
     output$map <- renderLeaflet({
         leaflet() %>%
             addTiles() %>%

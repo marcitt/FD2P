@@ -52,18 +52,18 @@ air_quality_raster <- mask(interpolate(grid, idw_model), london_boundary)
 air_quality_raster_unnormalised <- mask(interpolate(grid, idw_model), london_boundary)
 air_quality_raster <- normalize_raster(air_quality_raster)
 
-# read spaces to visit shape file, save as a green space sf object, transform to UK CRS
+# read greenspace shape file, save as sf object, transform to UK CRS
 greenspace <- st_read("data/GiGL_SpacesToVisit_Open_Shp/GiGL_SpacesToVisit_region.shp") %>%
     st_transform(crs = 27700)
 
 greenspace_raster <- rasterize(st_as_sf(greenspace), air_quality_raster, field = 1, background = NA) #rasterise green space
 greenspace_raster <- distance(greenspace_raster) # compute green space distance
-greenspace_raster <- exp(-greenspace_raster / 2000) # decay constant for proximity importance
+greenspace_raster <- exp(-greenspace_raster / 2000) # decay constant to determine importance of proximity
 greenspace_raster <- normalize_raster(1 - greenspace_raster)
 
 # default wellbeing metric raster
 wellbeing_raster <- normalize_raster(1 - (0.5 * air_quality_raster + 0.5 * greenspace_raster))
 
-#for greenspace visualization layer
+#only for greenspace visualization layer
 greenspace <- st_read("data/GiGL_SpacesToVisit_Open_Shp/GiGL_SpacesToVisit_region.shp")
 greenspace <- st_transform(greenspace, crs = 4326)

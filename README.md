@@ -17,7 +17,7 @@ This is required to display recently collected air quality data - if you would l
 air_quality <- load_air_quality(str_date)
 ```
 
-and uncomment this line to use a previously stored data-frame:
+and uncomment this line to use a previously stored data-frame instead:
 ```
 air_quality <- read_csv("data/air_quality/2024-12-16/active_pm25_london_sensors_2024-12-17.csv")
 ```
